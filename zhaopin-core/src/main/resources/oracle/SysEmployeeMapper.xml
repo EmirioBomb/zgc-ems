@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zgc.zhaopin.persistence.mapper.SysEmployeeMapper">
+	<resultMap id="rm" type="com.zgc.zhaopin.persistence.beans.SysEmployee">
+        <result property="id" jdbcType="BIGINT" column="id" />
+		<result property="name" jdbcType="CHAR" column="name" />
+		<result property="sex" jdbcType="CHAR" column="sex" />
+		<result property="birthday" jdbcType="DATE" column="birthday" />
+		<result property="age" jdbcType="INTEGER" column="age" />
+		<result property="phone" jdbcType="CHAR" column="phone" />
+		<result property="address" jdbcType="VARCHAR" column="address" />
+		<result property="salary" jdbcType="BIGINT" column="salary" />
+		<result property="email" jdbcType="VARCHAR" column="email" />
+		<result property="job" jdbcType="CHAR" column="job" />
+		<result property="status" jdbcType="TINYINT" column="status" />
+		<result property="deptId" jdbcType="BIGINT" column="dept_id" />
+		<result property="entryTime" jdbcType="DATE" column="entry_time" />
+		<result property="departureTime" jdbcType="DATE" column="departure_time" />
+		<result property="modifyTime" jdbcType="DATE" column="modify_time" />
+		<result property="remark" jdbcType="VARCHAR" column="remark" />
+	</resultMap>
+
+	<!-- list employee info with page break -->
+	<select id="findPageBreakbyCondition" parameterType="com.zgc.zhaopin.business.vo.EmployeeConditionVO" resultMap="rm">
+		SELECT
+            se.*
+		FROM
+			sys_employee se
+		WHERE
+			1 = 1
+		<!-- WHERE
+			rownum <![CDATA[ <![CDATA[ <= ]]> ]]> 10 -->
+		<if test="keywords != null and keywords != '' ">
+			AND
+			(
+				se.name LIKE CONCAT('%', #{keywords, jdbcType=VARCHAR}, '%')
+			)
+		</if>
+		
+		<!-- GROUP BY
+			se.id -->
+	</select>
+
+	<!-- list sex by total number -->
+	<select id="listSexByGroup" resultType="java.util.HashMap">
+		SELECT 
+			se.sex as "sex", count(*) as "total"
+		FROM
+			sys_employee se
+		GROUP BY
+			sex
+		ORDER BY
+			sex
+	</select>
+
+	<!-- list sex by age -->
+    <select id="listSexByAge" resultType="java.util.HashMap">
+		SELECT
+			age as "age",
+			SUM(CASE WHEN sex='男' THEN 1 ELSE 0 END) AS "male",
+			SUM(CASE WHEN sex='女' THEN 1 ELSE 0 END) AS "female",
+			SUM(CASE WHEN sex='保密' THEN 1 ELSE 0 END) AS "secret"
+		FROM
+			(
+				SELECT
+					age, sex
+				FROM
+					sys_employee
+			) tmp
+		GROUP BY 
+			age
+		ORDER BY 
+			age
+    </select>
+
+
+	<!-- list sex by range -->
+    <select id="listSexByRange" resultType="java.util.HashMap">
+		SELECT
+			"age_range",
+			SUM( CASE WHEN "sex" = '男' THEN "total" ELSE 0 END ) AS "male",
+			SUM( CASE WHEN "sex" = '女' THEN "total" ELSE 0 END ) AS "female",
+			SUM( CASE WHEN "sex" = '保密' THEN "total" ELSE 0 END ) AS "secret" 
+		FROM
+			( 
+				SELECT 
+					CASE 
+						WHEN age <![CDATA[ >= ]]> 18 AND age <![CDATA[ <= ]]> 20 THEN '18-20' 
+						WHEN age <![CDATA[ >= ]]> 21 AND age <![CDATA[ <= ]]> 25 THEN '21-25' 
+						WHEN age <![CDATA[ >= ]]> 26 AND age <![CDATA[ <= ]]> 30 THEN '26-30' 
+						WHEN age <![CDATA[ >= ]]> 31 AND age <![CDATA[ <= ]]> 35 THEN '31-35' 
+						WHEN age <![CDATA[ >= ]]> 36 AND age <![CDATA[ <= ]]> 40 THEN '36-40' 
+					END 
+					AS "age_range", sex as "sex", count( sex ) AS "total"
+				FROM 
+					sys_employee 
+				GROUP BY 
+					age, sex
+			) tmp 
+		GROUP BY
+			"age_range" 
+		ORDER BY
+			"age_range"
+    </select>
+
+
+    <select id="listByEmployee" resultType="java.util.HashMap">
+        SELECT
+			se.job as "job",
+			COUNT( se.job ) AS "total" 
+		FROM
+			sys_employee se 
+		GROUP BY
+			se.job
+		ORDER BY
+			"total"
+    </select>
+
+
+    <select id="listByArea" resultType="java.util.HashMap">
+        SELECT
+			SUBSTR(address, 1, 3) AS "province",
+			COUNT(SUBSTR( address, 1, 3)) AS "total" 
+		FROM
+			sys_employee 
+		GROUP BY
+			SUBSTR(address, 1, 3) 
+		ORDER BY
+			"total"
+	</select>
+
+
+    <select id="listByDept" resultType="java.util.HashMap">
+        SELECT
+			dept_name AS "name",
+			"total" 
+		FROM
+			( 
+				SELECT 
+					dept_id, COUNT( se.dept_id ) AS "total" 
+				FROM 
+					sys_employee se GROUP BY se.dept_id 
+			) tmp
+		INNER JOIN sys_dept sd 
+		ON sd.dept_id = tmp.dept_id
+    </select>
+
+
+    <select id="listBySalary" resultType="java.util.HashMap">
+		SELECT
+			"id",
+			<!-- COUNT( "salary" ) AS "name", -->
+			"name",
+			MAX( "salary" ) AS "max",
+			MIN( "salary" ) AS "min" 
+		FROM
+			(
+				SELECT
+					sd.dept_id AS "id",
+					sd.dept_name AS "name",
+					se.salary AS "salary" 
+				FROM
+					sys_employee se
+				INNER JOIN sys_dept sd 
+				ON sd.dept_id = se.dept_id 
+			) tmp 
+		GROUP BY
+			"id", "name"
+		ORDER BY
+			"id"
+    </select>
+
+
+    <select id="listByAnnuallySalary" resultType="java.util.LinkedHashMap">
+        SELECT
+			*
+		FROM
+		(
+			SELECT
+				TO_CHAR( entry_time, 'yyyy' ) AS "year",
+				TO_CHAR( entry_time, 'mm' ) AS "month",
+				SUM( salary ) AS "total" 
+			FROM
+				sys_employee se
+			INNER JOIN sys_dept sd 
+			ON sd.dept_id = se.dept_id 
+			GROUP BY
+				TO_CHAR( entry_time, 'yyyy' ),
+				TO_CHAR( entry_time, 'mm' ) 
+			ORDER BY
+				TO_CHAR( entry_time, 'yyyy' ) 
+		) 
+		PIVOT (
+			SUM( "total" ) 
+			FOR "month" IN (
+				'01' "jan",
+				'02' "feb",
+				'03' "mar",
+				'04' "apr",
+				'05' "may",
+				'06' "jun",
+				'07' "jul",
+				'08' "aug",
+				'09' "sep",
+				'10' "oct",
+				'11' "nov",
+				'12' "dec" 
+			) 
+		) 
+		ORDER BY
+			"year"
+    </select>
+
+</mapper>

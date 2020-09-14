@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zgc.zhaopin.persistence.mapper.SysDeptMapper">
+	<resultMap id="rm" type="com.zgc.zhaopin.persistence.beans.SysDept">
+        <result property="deptId" jdbcType="BIGINT" column="dept_id" />
+		<result property="deptName" jdbcType="VARCHAR" column="dept_name" />
+		<result property="levelId" jdbcType="VARCHAR" column="level_id" />
+		<result property="parentId" jdbcType="BIGINT" column="parent_id" />
+	</resultMap>
+
+	<select id="findPageBreakbyCondition" parameterType="com.zgc.zhaopin.business.vo.DeptConditionVO" resultMap="rm">
+		SELECT
+			s.dept_id, s.parent_id, dept_name
+		FROM
+			sys_dept s
+		<!-- WHERE
+			1 = 1 -->
+		<if test="keywords != null and keywords != '' ">
+			AND
+			(
+				s.dept_name LIKE CONCAT('%', #{keywords, jdbcType=VARCHAR}, '%')
+			)
+		</if>
+		<!-- 查询部门信息 -->
+		<if test="dept != null">
+			<if test="dept.deptId!=null">
+				AND s.dept_id = #{dept.deptId}
+			</if>
+			<if test="dept.deptName!=null">
+                AND s.dept_name = #{dept.deptName}
+			</if>
+			<if test="dept.parentId!=null">
+				AND s.parent_id = #{dept.parentId}
+			</if>
+		</if>
+		<!-- GROUP BY
+			s.dept_id -->
+	</select>
+
+	<insert id="insertDept" parameterType="com.zgc.zhaopin.persistence.beans.SysDept"> 
+		<selectKey keyColumn="dept_id" keyProperty="deptId" order="BEFORE" resultType="long">
+			select nvl(max(dept_id), 0) + 1 from sys_dept
+		</selectKey>
+		insert into sys_dept(DEPT_ID, DEPT_NAME, PARENT_ID, LEVEL_ID) values(#{deptId}, #{deptName}, #{parentId}, #{levelId})
+		<!-- insert into sys_dept(DEPT_ID, DEPT_NAME, PARENT_ID) values(#{deptId}, #{deptName}, #{parentId}) -->
+	</insert>
+
+	<select id="checkCurrentMaxID" resultType="long">
+		SELECT 
+			nvl(max(dept_id), 0) + 1
+		FROM
+			sys_dept
+	</select>
+
+</mapper>
