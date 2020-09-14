@@ -32,16 +32,16 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<!-- <sourceDirectory>src</sourceDirectory> -->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
+				<!-- <configuration>
 					<mainClass>com.zgc.zhaopin.ZhaopinAdminApplication</mainClass>
-					<!-- <layout>JAR</layout> -->
-					<!-- <skip>true</skip> -->
-				</configuration>
+					<layout>JAR</layout>
+					<skip>true</skip>
+				</configuration> -->
 				<!-- <executions>
 					<execution>
 						<goals>
