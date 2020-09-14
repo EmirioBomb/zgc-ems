@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 控制台 appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%class:%line] %highlight(%-5level) %white(%logger) - %green(%msg%n)</pattern>
+        </encoder>
+    </appender>
+   
+    <logger name="org.springframework.core.env" level="ERROR"/>
+    <logger name="org.springframework.boot.web.servlet" level="ERROR"/>
+    <logger name="com.zgc.zhaopin" level="info"/>
+
+    <!--控制台打印资源加载信息 -->
+    <root level="ERROR">
+        <appender-ref ref="STDOUT"/>    
+    </root>
+</configuration>  

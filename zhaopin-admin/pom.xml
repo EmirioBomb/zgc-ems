@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>zhaopin-admin</artifactId>
+	<version>V1.0.0</version>
+	<packaging>jar</packaging>
+
+	<name>zhaopin-admin</name>
+
+	<parent>
+		<groupId>com.zgc.zhaopin</groupId>
+		<artifactId>zhaopin</artifactId>
+		<version>V1.0.0</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.zgc.zhaopin</groupId>
+			<artifactId>zhaopin-core</artifactId>
+			<version>V1.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.5</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.zgc.zhaopin.ZhaopinAdminApplication</mainClass>
+					<!-- <layout>JAR</layout> -->
+					<!-- <skip>true</skip> -->
+				</configuration>
+				<!-- <executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions> -->
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>
