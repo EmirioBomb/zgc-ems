@@ -1,6 +1,6 @@
 # Server settings
 server:
-    port: 8090
+    port: 8080
     # HTTP请求和响应头的最大量，以字节为单位，默认值为4096字节,超过此长度的部分不予处理,一般8K。解决java.io.EOFException: null问题
     max-http-header-size: 8192
     use-forward-headers: true
@@ -28,7 +28,7 @@ spring:
         driver-class-name: oracle.jdbc.OracleDriver
         url: jdbc:oracle:thin:@127.0.0.1:5050:xe
         username: root
-        password: wjhlfamily
+        password: root
         # master: 
         #     type: com.alibaba.druid.pool.DruidDataSource
         #     driver-class-name: com.mysql.cj.jdbc.Driver
