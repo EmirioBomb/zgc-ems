@@ -64,13 +64,21 @@ ___
 2. 找到ZhaopinAdminApplication.java运行即可
 ```
 ##### 3. 项目打包与运行
-```maven
+```text
 1. 进入zgc-ems目录
 2. 输入: mvn clean -DskipTests package
 3. 结束后，进入到zhaopin-admin/target目录下，找到xxx.jar文件
 4. 通过: java -jar xxx.jar运行项目即可
 ```
+
+##### 4. 运行Release中的jar包
+```text
+1. mysql的密码设为root，redis的密码设为12345
+2. 下载zgc-ems-v1.0.0.jar到本地
+3. 通过: java -jar zgc-ems-v1.0.0.jar 运行项目
+```
 ---
+
 #### 运行预览
 
 ##### 1. 员工管理预览
