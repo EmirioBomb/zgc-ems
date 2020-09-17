@@ -70,4 +70,15 @@ public class RenderController {
         return ResultUtil.view("employee/list");
     }
 
+    @RequiresPermissions("swagger")
+    @GetMapping("/swagger")
+    public ModelAndView swagger() {
+        return ResultUtil.redirect("/swagger-ui.html");
+    }
+
+    @RequiresPermissions("knife4j")
+    @GetMapping("/knife4j")
+    public ModelAndView knife4j() {
+        return ResultUtil.redirect("/doc.html");
+    }
 }

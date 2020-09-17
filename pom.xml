@@ -80,6 +80,27 @@
             <version>3.4</version>
         </dependency>
 
+        <!-- import swagger -->
+        <dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+        </dependency>
+        
+        <!-- import knife4j -->
+        <dependency>
+			<groupId>com.github.xiaoymin</groupId>
+			<artifactId>knife4j-spring-boot-starter</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+
+
     </dependencies>
 
     
