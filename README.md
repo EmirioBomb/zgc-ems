@@ -36,7 +36,7 @@ ___
 * MySQL8.0 或 Oracle, 
 * Redis
 * Lombok
-
+* [通过数据存储过程生成员工表随机数据](https://github.com/EmirioBomb/generate_random_data_mysql8)
 > 注1: 关于数据库选择与配置，具体可根据application.yml文件
 
 > 注2: 关于redis配置，具体可根据application.yml文件
